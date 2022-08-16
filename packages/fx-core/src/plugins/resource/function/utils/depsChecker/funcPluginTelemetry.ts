@@ -56,15 +56,23 @@ export class FuncPluginTelemetry implements DepsTelemetry {
     TelemetryHelper.sendSuccessEvent(eventName, FuncPluginTelemetry.getCommonProps(), measurements);
   }
 
-  public sendUserErrorEvent(eventName: DepsCheckerEvent, errorMessage: string): void {
+  public sendUserErrorEvent(
+    eventName: DepsCheckerEvent,
+    errorMessage: string,
+    properties: { [key: string]: string } | undefined
+  ): void {
     const error = new UserError(this._source, eventName, errorMessage);
-    TelemetryHelper.sendErrorEvent(eventName, error, FuncPluginTelemetry.getCommonProps());
+    TelemetryHelper.sendErrorEvent(eventName, error, {
+      ...FuncPluginTelemetry.getCommonProps(),
+      ...(properties || {}),
+    });
   }
 
   public sendSystemErrorEvent(
     eventName: DepsCheckerEvent,
     errorMessage: string,
-    errorStack: string
+    errorStack: string,
+    properties: { [key: string]: string } | undefined
   ): void {
     const error = new SystemError(
       this._source,
@@ -72,7 +80,10 @@ export class FuncPluginTelemetry implements DepsTelemetry {
       `errorMsg=${errorMessage},errorStack=${errorStack}`
     );
     error.stack = errorStack;
-    TelemetryHelper.sendErrorEvent(eventName, error, FuncPluginTelemetry.getCommonProps());
+    TelemetryHelper.sendErrorEvent(eventName, error, {
+      ...FuncPluginTelemetry.getCommonProps(),
+      ...(properties || {}),
+    });
   }
 }
 

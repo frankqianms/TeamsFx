@@ -12,7 +12,16 @@ export interface DepsTelemetry {
 
   sendEventWithDuration(eventName: DepsCheckerEvent, action: () => Promise<void>): Promise<void>;
 
-  sendUserErrorEvent(eventName: DepsCheckerEvent, errorMessage: string): void;
+  sendUserErrorEvent(
+    eventName: DepsCheckerEvent,
+    errorMessage: string,
+    properties?: { [key: string]: string }
+  ): void;
 
-  sendSystemErrorEvent(eventName: DepsCheckerEvent, errorMessage: string, errorStack: string): void;
+  sendSystemErrorEvent(
+    eventName: DepsCheckerEvent,
+    errorMessage: string,
+    errorStack: string,
+    properties?: { [key: string]: string }
+  ): void;
 }

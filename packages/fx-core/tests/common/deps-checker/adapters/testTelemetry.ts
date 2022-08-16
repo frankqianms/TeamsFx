@@ -18,14 +18,19 @@ export class TestTelemetry implements DepsTelemetry {
     return Promise.resolve();
   }
 
-  sendUserErrorEvent(eventName: DepsCheckerEvent, errorMessage: string): void {
+  sendUserErrorEvent(
+    eventName: DepsCheckerEvent,
+    errorMessage: string,
+    properties: { [key: string]: string } | undefined
+  ): void {
     // empty method
   }
 
   sendSystemErrorEvent(
     eventName: DepsCheckerEvent,
     errorMessage: string,
-    errorStack: string
+    errorStack: string,
+    properties: { [key: string]: string } | undefined
   ): void {
     // empty method
   }
