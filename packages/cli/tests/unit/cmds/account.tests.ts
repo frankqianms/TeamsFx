@@ -15,6 +15,8 @@ import M365TokenProvider from "../../../src/commonlib/m365Login";
 import AzureTokenProvider from "../../../src/commonlib/azureLogin";
 import { signedIn, signedOut } from "../../../src/commonlib/common/constant";
 
+import "@microsoft/extra-shot-mocha";
+
 describe("Account Command Tests", function () {
   const sandbox = sinon.createSandbox();
   let registeredCommands: string[] = [];

@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": "true",
   "bin": {
-    "extra-shot-mocha": "./bin/extra-shot-mocha"
+    "extra-shot-mocha": "./lib/extra-shot-mocha"
   },
   "scripts": {
     "build": "npx tsc -p ./",
