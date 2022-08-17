@@ -119,7 +119,7 @@ export class BotValidator {
     );
     if (includeAAD) {
       console.log("this context is", this.ctx);
-      console.log("response M365_AUTHORITY_HOST is", response[BaseConfig.M365_AUTHORITY_HOST]);
+      console.log("this response is", response);
       chai.assert.equal(
         response[BaseConfig.M365_AUTHORITY_HOST],
         this.ctx[PluginId.Aad][StateConfigKey.oauthHost] as string
