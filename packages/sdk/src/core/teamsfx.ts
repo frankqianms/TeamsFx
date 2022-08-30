@@ -28,6 +28,32 @@ const ReservedKey: Set<string> = new Set<string>([
   "sqlIdentityId",
 ]);
 
+export interface OBOUserCredentialClientSecretConfig {
+  "clientId"?: string,
+  "authorityHost"?: string,
+  "clientSecret"?: string,
+  "tenantId"?: string
+}
+
+export interface OBOUserCredentialCertificateContentConfig {
+  "clientId"?: string,
+  "authorityHost"?: string,
+  "certificateContent"?: string,
+  "tenantId"?: string
+}
+
+export interface AppCredentialClientSecretConfig {
+  "clientId"?: string,
+  "clientSecret"?: string,
+  "tenantId"?: string
+}
+
+export interface AppCredentialCertificateContentConfig {
+  "clientId"?: string,
+  "certificateContent"?: string,
+  "tenantId"?: string
+}
+
 /**
  * A class providing credential and configuration.
  */
@@ -41,17 +67,17 @@ export class TeamsFx implements TeamsFxConfiguration {
    * Constructor of TeamsFx
    *
    * @param {IdentityType} identityType - Choose user or app identity
-   * @param customConfig - key/value pairs of customized configuration that overrides default ones.
-   *
+   * @param customConfig - key/value pairs of customized configuration that overrides default ones, or a specific type according to scenarios
    * @throws {@link ErrorCode|IdentityTypeNotSupported} when setting app identity in browser.
    */
-  constructor(identityType?: IdentityType, customConfig?: Record<string, string>) {
+  constructor(identityType?: IdentityType, customConfig?: Record<string, string> | OBOUserCredentialClientSecretConfig | OBOUserCredentialCertificateContentConfig | AppCredentialCertificateContentConfig | AppCredentialClientSecretConfig) {
     this.identityType = identityType ?? IdentityType.User;
     this.configuration = new Map<string, string>();
     this.loadFromEnv();
     if (customConfig) {
-      for (const key of Object.keys(customConfig)) {
-        const value = customConfig[key];
+      const myConfig: Record<string, string> = customConfig as Record<string, string>;
+      for (const key of Object.keys(myConfig)) {
+        const value = myConfig[key];
         if (value) {
           this.configuration.set(key, value);
         }
