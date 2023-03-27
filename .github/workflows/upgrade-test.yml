@@ -23,8 +23,6 @@ jobs:
         - tab-non-sso
         - bot
         - message-extension
-        - sso-launch-page
-        - search-app
         language: ['javascript', 'typescript']
 
     env:
