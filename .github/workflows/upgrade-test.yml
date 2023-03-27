@@ -1,0 +1,59 @@
+name: Test upgrade
+
+on:
+  workflow_dispatch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        cli-version:
+        - 1.0.0 # ttk 4.0.0
+        - 1.0.1
+        - 1.0.2
+        - 1.0.3
+        - 1.0.4
+        - 1.0.5
+        - 1.1.2 # ttk 4.0.6
+        - 1.1.3 # ttk 4.1.0
+        - 1.1.4 # ttk 4.1.1 & 4.1.2
+        - 1.1.5 # ttk 4.1.3
+        - 1.2.0 # ttk 4.2.0
+        - 1.2.1
+        - 1.2.2
+        - 1.2.3
+        - 1.2.4
+        capabilities:
+        - command-bot
+        - workflow-bot
+        - dashboard-tab
+        - tab
+        - tab-non-sso
+        - bot
+        - message-extension
+        - sso-launch-page
+        - search-app
+        language: ['javascript', 'typescript']
+
+    env:
+      AZURE_ACCOUNT_NAME: ${{ secrets.TEST_USER_NAME }}
+      AZURE_ACCOUNT_OBJECT_ID: ${{ secrets.TEST_USER_OBJECT_ID }}
+      AZURE_ACCOUNT_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.TEST_SUBSCRIPTION_ID }}
+      AZURE_TENANT_ID: ${{ secrets.TEST_TENANT_ID }}
+      M365_ACCOUNT_NAME: ${{ secrets.TEST_USER_NAME }}
+      M365_ACCOUNT_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+      M365_TENANT_ID: ${{ secrets.TEST_TENANT_ID_2 }}
+      CI_ENABLED: "true"
+      M365_ACCOUNT_COLLABORATOR: ${{ secrets.TEST_COLLABORATOR_USER_NAME }}
+      AZURE_DEVOPS_EXT_PAT: ${{ secrets.ADO_PAT }}
+      
+    steps:
+    - run: npm install -g @microsoft/teamsfx-cli@${{ matrix.cli-version }}
+    - run: teamsfx new --app-name migrationtest --capabilities ${{ matrix.capabilities }} --programming-language ${{ matrix.language }} --interactive false
+    - run: npm install -g @microsoft/teamsfx-cli@alpha
+    - run: teamsfx upgrade --force
+    - run: teamsfx provision --env dev 
+    - run: teamsfx deploy --env dev
