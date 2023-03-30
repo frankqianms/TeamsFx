@@ -5,6 +5,7 @@ on:
 
 jobs:
   setup:
+    runs-on: ubuntu-latest
     env:
       AZURE_ACCOUNT_NAME: frankqian_p@outlook.com
       AZURE_ACCOUNT_PASSWORD: Qwy19951102!@#$
