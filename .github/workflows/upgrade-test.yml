@@ -30,5 +30,6 @@ jobs:
     - run: teamsfx new --app-name migrationtest --capabilities ${{ matrix.capabilities }} --programming-language ${{ matrix.language }} --interactive false
     - run: npm install -g @microsoft/teamsfx-cli@alpha
     - run: teamsfx upgrade --force
+    - run: cd migrationtest
     - run: teamsfx provision --env dev 
     - run: teamsfx deploy --env dev
