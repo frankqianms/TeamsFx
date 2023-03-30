@@ -22,7 +22,6 @@ jobs:
       AZURE_TENANT_ID: 2f1e9fa5-d40a-476c-ac84-5744d601ca90
       M365_ACCOUNT_NAME: frankqian@2hgvkg.onmicrosoft.com
       M365_ACCOUNT_PASSWORD: Qwy19951102!@#
-      M365_TENANT_ID: ${{ secrets.TEST_TENANT_ID_2 }}
       CI_ENABLED: "true"
       
     steps:
