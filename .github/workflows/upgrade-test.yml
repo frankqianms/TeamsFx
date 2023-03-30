@@ -46,6 +46,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    needs: setup
+
     strategy:
       matrix:
         cli-version:
