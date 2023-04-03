@@ -69,14 +69,14 @@ jobs:
     steps:
     - run: npm install -g @microsoft/teamsfx-cli@${{ matrix.cli-version }}
     - run: teamsfx new --app-name migrationtest --capabilities ${{ matrix.capabilities }} --programming-language ${{ matrix.language }} --interactive false
-      working-directory: ~/
+      working-directory: ./
     - run: npm install -g @microsoft/teamsfx-cli@2.0.0-alpha.e6bcbdb22.0
-      working-directory: ~/
+      working-directory: ./
     - run: teamsfx upgrade --force
-      working-directory: ~/migrationtest
+      working-directory: ./migrationtest
     - run: teamsfx provision --env dev
-      working-directory: ~/migrationtest 
+      working-directory: ./migrationtest 
     - run: teamsfx deploy --env dev
-      working-directory: ~/migrationtest
+      working-directory: ./migrationtest
     - run: npx ts-node ./packages/cli/tests/utils/cleaner.ts migrationtest
-      working-directory: ~/
+      working-directory: ./
