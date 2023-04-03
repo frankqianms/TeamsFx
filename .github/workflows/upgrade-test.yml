@@ -7,12 +7,12 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     env:
-      AZURE_ACCOUNT_NAME: {{ secrets.TEST_USER_NAME }}
-      AZURE_ACCOUNT_PASSWORD: {{ secrets.TEST_USER_PASSWORD }}
-      AZURE_SUBSCRIPTION_ID: {{ secrets.TEST_SUBSCRIPTION_ID }}
-      AZURE_TENANT_ID: {{ secrets.TEST_TENANT_ID }}
-      M365_ACCOUNT_NAME: {{ secrets.TEST_MUSER_NAME }}
-      M365_ACCOUNT_PASSWORD: {{ secrets.TEST_MUSER_PASSWORD }}
+      AZURE_ACCOUNT_NAME: ${{ secrets.TEST_USER_NAME }}
+      AZURE_ACCOUNT_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.TEST_SUBSCRIPTION_ID }}
+      AZURE_TENANT_ID: ${{ secrets.TEST_TENANT_ID }}
+      M365_ACCOUNT_NAME: ${{ secrets.TEST_MUSER_NAME }}
+      M365_ACCOUNT_PASSWORD: ${{ secrets.TEST_MUSER_PASSWORD }}
       CI_ENABLED: "true"
     
     steps:
@@ -35,6 +35,14 @@ jobs:
           max_attempts: 5
           command: |
             npm run setup-metrics
+      
+      - name: Setup project
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 10
+          max_attempts: 5
+          command: |
+            npm run setup
 
   test:
     runs-on: ubuntu-latest
@@ -42,12 +50,12 @@ jobs:
     needs: setup
 
     env:
-      AZURE_ACCOUNT_NAME: {{ secrets.TEST_USER_NAME }}
-      AZURE_ACCOUNT_PASSWORD: {{ secrets.TEST_USER_PASSWORD }}
-      AZURE_SUBSCRIPTION_ID: {{ secrets.TEST_SUBSCRIPTION_ID }}
-      AZURE_TENANT_ID: {{ secrets.TEST_TENANT_ID }}
-      M365_ACCOUNT_NAME: {{ secrets.TEST_MUSER_NAME }}
-      M365_ACCOUNT_PASSWORD: {{ secrets.TEST_MUSER_PASSWORD }}
+      AZURE_ACCOUNT_NAME: ${{ secrets.TEST_USER_NAME }}
+      AZURE_ACCOUNT_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.TEST_SUBSCRIPTION_ID }}
+      AZURE_TENANT_ID: ${{ secrets.TEST_TENANT_ID }}
+      M365_ACCOUNT_NAME: ${{ secrets.TEST_MUSER_NAME }}
+      M365_ACCOUNT_PASSWORD: ${{ secrets.TEST_MUSER_PASSWORD }}
       CI_ENABLED: "true"
 
     strategy:
@@ -61,9 +69,14 @@ jobs:
     steps:
     - run: npm install -g @microsoft/teamsfx-cli@${{ matrix.cli-version }}
     - run: teamsfx new --app-name migrationtest --capabilities ${{ matrix.capabilities }} --programming-language ${{ matrix.language }} --interactive false
+      working-directory: ~/
     - run: npm install -g @microsoft/teamsfx-cli@2.0.0-alpha.e6bcbdb22.0
+      working-directory: ~/
     - run: teamsfx upgrade --force
-    - run: cd migrationtest
-    - run: teamsfx provision --env dev 
+      working-directory: ~/migrationtest
+    - run: teamsfx provision --env dev
+      working-directory: ~/migrationtest 
     - run: teamsfx deploy --env dev
+      working-directory: ~/migrationtest
     - run: npx ts-node ./packages/cli/tests/utils/cleaner.ts migrationtest
+      working-directory: ~/
