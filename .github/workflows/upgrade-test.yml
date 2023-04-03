@@ -43,6 +43,12 @@ jobs:
           npm pack
           mv *.tgz teamsfx-cli.tgz
 
+      - name: Upload to artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Teamsfx-cli
+          path: ./packages/cli/teamsfx-cli.tgz
+
   test:
     runs-on: ubuntu-latest
 
