@@ -36,19 +36,6 @@ jobs:
           command: |
             npm run setup-metrics
 
-      - name: Package CLI
-        working-directory: packages/cli
-        run: |
-          rm -f *.tgz
-          npm pack
-          mv *.tgz teamsfx-cli.tgz
-
-      - name: Upload to artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: Teamsfx-cli
-          path: ./packages/cli/teamsfx-cli.tgz
-
   test:
     runs-on: ubuntu-latest
 
@@ -74,7 +61,7 @@ jobs:
     steps:
     - run: npm install -g @microsoft/teamsfx-cli@${{ matrix.cli-version }}
     - run: teamsfx new --app-name migrationtest --capabilities ${{ matrix.capabilities }} --programming-language ${{ matrix.language }} --interactive false
-    - run: npm install -g @microsoft/teamsfx-cli@alpha
+    - run: npm install -g @microsoft/teamsfx-cli@2.0.0-alpha.eefb51795.0
     - run: teamsfx upgrade --force
     - run: cd migrationtest
     - run: teamsfx provision --env dev 
