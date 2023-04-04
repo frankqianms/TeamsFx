@@ -51,10 +51,13 @@ jobs:
       working-directory: ./migrationtest
     - run: npx teamsfx upgrade --force
       working-directory: ./migrationtest
-    - run: set CI_ENABLED=true
     - run: npx teamsfx provision --env dev
       working-directory: ./migrationtest 
+      env: 
+        CI_ENABLED: "true"
     - run: npx teamsfx deploy --env dev
       working-directory: ./migrationtest
+      env: 
+        CI_ENABLED: "true"
     # - run: npx ts-node ./packages/cli/tests/utils/cleaner.ts migrationtest
     #   working-directory: ./
