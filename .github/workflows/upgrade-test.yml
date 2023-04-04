@@ -47,7 +47,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    needs: setup
 
     env:
       AZURE_ACCOUNT_NAME: ${{ secrets.TEST_USER_NAME }}
@@ -72,7 +71,7 @@ jobs:
       working-directory: ./
     - run: npm install -g @microsoft/teamsfx-cli@alpha
       working-directory: ./
-    - run: set TEAMSFX_V3=true
+    - run: $ENV:TEAMSFX_V3="true"
       working-directory: ./
     - run: teamsfx upgrade --force
       working-directory: ./migrationtest
