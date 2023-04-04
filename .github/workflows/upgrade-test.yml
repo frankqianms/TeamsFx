@@ -14,6 +14,7 @@ jobs:
       AZURE_TENANT_ID: ${{ secrets.TEST_TENANT_ID }}
       M365_ACCOUNT_NAME: ${{ secrets.TEST_MUSER_NAME }}
       M365_ACCOUNT_PASSWORD: ${{ secrets.TEST_MUSER_PASSWORD }}
+      M365_TENANT_ID: ${{ secrets.TEST_TENANT_ID_2 }}
 
     strategy:
       matrix:
@@ -59,5 +60,6 @@ jobs:
       working-directory: ./migrationtest
       env: 
         CI_ENABLED: "true"
-    # - run: npx ts-node ./packages/cli/tests/utils/cleaner.ts migrationtest
-    #   working-directory: ./
+    - run: npx ts-node ./packages/cli/tests/utils/cleaner.ts migrationtest
+      working-directory: ./
+      if: ${{ always() }}
