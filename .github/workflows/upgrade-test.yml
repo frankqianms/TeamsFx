@@ -55,7 +55,7 @@ jobs:
       AZURE_TENANT_ID: ${{ secrets.TEST_TENANT_ID }}
       M365_ACCOUNT_NAME: ${{ secrets.TEST_MUSER_NAME }}
       M365_ACCOUNT_PASSWORD: ${{ secrets.TEST_MUSER_PASSWORD }}
-      CI_ENABLED: "true"
+      
 
     strategy:
       matrix:
@@ -69,17 +69,17 @@ jobs:
     - run: npm install -g @microsoft/teamsfx-cli@${{ matrix.cli-version }}
     - run: teamsfx new --app-name migrationtest --capabilities ${{ matrix.capabilities }} --programming-language ${{ matrix.language }} --interactive false
       working-directory: ./
-    - run: dir && node -v && teamsfx -v
+    - run: ls -al && node -v && teamsfx -v
       working-directory: ./migrationtest
-    - run: npm install -g @microsoft/teamsfx-cli@alpha
-      working-directory: ./
-    - run: set TEAMSFX_V3=true
-      working-directory: ./
-    - run: teamsfx upgrade --force
+    - run: npm install -D @microsoft/teamsfx-cli@alpha
       working-directory: ./migrationtest
-    - run: teamsfx provision --env dev
+    - run: npx teamsfx -v
+    - run: npx teamsfx upgrade --force
+      working-directory: ./migrationtest
+    - run: set CI_ENABLED=true
+    - run: npx teamsfx provision --env dev
       working-directory: ./migrationtest 
-    - run: teamsfx deploy --env dev
+    - run: npx teamsfx deploy --env dev
       working-directory: ./migrationtest
     - run: npx ts-node ./packages/cli/tests/utils/cleaner.ts migrationtest
       working-directory: ./
