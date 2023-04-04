@@ -52,11 +52,11 @@ jobs:
       working-directory: ./migrationtest
     - run: npx teamsfx upgrade --force
       working-directory: ./migrationtest
-    - run: npx teamsfx provision --env dev
+    - run: npx teamsfx provision --env dev --debug
       working-directory: ./migrationtest 
       env: 
         CI_ENABLED: "true"
-    - run: npx teamsfx deploy --env dev
+    - run: npx teamsfx deploy --env dev --debug
       working-directory: ./migrationtest
       env: 
         CI_ENABLED: "true"
