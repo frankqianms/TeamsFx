@@ -32,13 +32,13 @@ jobs:
       with:
         node-version: 16
     
-    - name: Setup project
-      uses: nick-fields/retry@v2
-      with:
-        timeout_minutes: 10
-        max_attempts: 5
-        command: |
-          npm run setup
+    # - name: Setup project
+    #   uses: nick-fields/retry@v2
+    #   with:
+    #     timeout_minutes: 10
+    #     max_attempts: 5
+    #     command: |
+    #       npm run setup
 
     - run: npm install -g @microsoft/teamsfx-cli@${{ matrix.cli-version }}
     - run: teamsfx new --app-name migrationtest --capabilities ${{ matrix.capabilities }} --programming-language ${{ matrix.language }} --interactive false
@@ -56,5 +56,5 @@ jobs:
       working-directory: ./migrationtest 
     - run: npx teamsfx deploy --env dev
       working-directory: ./migrationtest
-    - run: npx ts-node ./packages/cli/tests/utils/cleaner.ts migrationtest
-      working-directory: ./
+    # - run: npx ts-node ./packages/cli/tests/utils/cleaner.ts migrationtest
+    #   working-directory: ./
