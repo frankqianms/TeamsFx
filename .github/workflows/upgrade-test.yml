@@ -69,6 +69,8 @@ jobs:
     - run: npm install -g @microsoft/teamsfx-cli@${{ matrix.cli-version }}
     - run: teamsfx new --app-name migrationtest --capabilities ${{ matrix.capabilities }} --programming-language ${{ matrix.language }} --interactive false
       working-directory: ./
+    - run: ls && node -v
+      working-directory: ./migrationtest
     - run: npm install -g @microsoft/teamsfx-cli@alpha
       working-directory: ./
     - run: set TEAMSFX_V3=true
