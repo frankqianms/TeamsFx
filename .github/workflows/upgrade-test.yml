@@ -4,50 +4,9 @@ on:
   workflow_dispatch
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    env:
-      AZURE_ACCOUNT_NAME: ${{ secrets.TEST_USER_NAME }}
-      AZURE_ACCOUNT_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
-      AZURE_SUBSCRIPTION_ID: ${{ secrets.TEST_SUBSCRIPTION_ID }}
-      AZURE_TENANT_ID: ${{ secrets.TEST_TENANT_ID }}
-      M365_ACCOUNT_NAME: ${{ secrets.TEST_MUSER_NAME }}
-      M365_ACCOUNT_PASSWORD: ${{ secrets.TEST_MUSER_PASSWORD }}
-      CI_ENABLED: "true"
-    
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - name: Setup legacy-peer-deps
-        run: |
-          npm config set legacy-peer-deps true
-
-      - name: Setup project
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 10
-          max_attempts: 5
-          command: |
-            npm run setup-metrics
-      
-      - name: Setup project
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 10
-          max_attempts: 5
-          command: |
-            npm run setup
-
   test:
     runs-on: ubuntu-latest
 
-
     env:
       AZURE_ACCOUNT_NAME: ${{ secrets.TEST_USER_NAME }}
       AZURE_ACCOUNT_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
@@ -55,7 +14,6 @@ jobs:
       AZURE_TENANT_ID: ${{ secrets.TEST_TENANT_ID }}
       M365_ACCOUNT_NAME: ${{ secrets.TEST_MUSER_NAME }}
       M365_ACCOUNT_PASSWORD: ${{ secrets.TEST_MUSER_PASSWORD }}
-      
 
     strategy:
       matrix:
@@ -66,14 +24,31 @@ jobs:
         language: ['javascript']
 
     steps:
+    - name: Checkout
+        uses: actions/checkout@v3
+
+    - name: Setup node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+    
+    - name: Setup project
+      uses: nick-fields/retry@v2
+      with:
+        timeout_minutes: 10
+        max_attempts: 5
+        command: |
+          npm run setup
+
     - run: npm install -g @microsoft/teamsfx-cli@${{ matrix.cli-version }}
     - run: teamsfx new --app-name migrationtest --capabilities ${{ matrix.capabilities }} --programming-language ${{ matrix.language }} --interactive false
       working-directory: ./
     - run: ls -al && node -v && teamsfx -v
       working-directory: ./migrationtest
-    - run: npm install -D @microsoft/teamsfx-cli@alpha
+    - run: npm install -D @microsoft/teamsfx-cli@2.0.0-alpha.9653a3f7c.0
       working-directory: ./migrationtest
     - run: npx teamsfx -v
+      working-directory: ./migrationtest
     - run: npx teamsfx upgrade --force
       working-directory: ./migrationtest
     - run: set CI_ENABLED=true
