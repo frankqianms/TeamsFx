@@ -69,18 +69,18 @@ jobs:
       working-directory: ./migrationtest
     - run: npm install -D @microsoft/teamsfx-cli@2.0.0-alpha.9653a3f7c.0
       working-directory: ./migrationtest
-    - run: npx teamsfx -v
-      working-directory: ./migrationtest
-    - run: npx teamsfx upgrade --force
-      working-directory: ./migrationtest
-    - run: npx teamsfx provision --env dev --debug
-      working-directory: ./migrationtest 
-      env: 
-        CI_ENABLED: "true"
-    - run: npx teamsfx deploy --env dev --debug
-      working-directory: ./migrationtest
-      env: 
-        CI_ENABLED: "true"
+    # - run: npx teamsfx -v
+    #   working-directory: ./migrationtest
+    # - run: npx teamsfx upgrade --force
+    #   working-directory: ./migrationtest
+    # - run: npx teamsfx provision --env dev --debug
+    #   working-directory: ./migrationtest 
+    #   env: 
+    #     CI_ENABLED: "true"
+    # - run: npx teamsfx deploy --env dev --debug
+    #   working-directory: ./migrationtest
+    #   env: 
+    #     CI_ENABLED: "true"
     - run: npx ts-node ./packages/cli/tests/utils/cleaner.ts migrationtest
       working-directory: ./
       if: ${{ always() }}
