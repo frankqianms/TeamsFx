@@ -17,12 +17,27 @@ jobs:
       M365_TENANT_ID: ${{ secrets.TEST_TENANT_ID_2 }}
 
     strategy:
+      max-parallel: 10
       matrix:
         cli-version:
         - 1.2.4
+        - 1.2.3
+        - 1.2.2
+        - 1.2.1
+        - 1.2.0
         capabilities:
         - command-bot
-        language: ['javascript']
+        - notification
+        - workflow-bot
+        - dashboard-tab
+        - tab
+        - tab-spfx
+        - tab-non-sso
+        - bot
+        - message-extension
+        - sso-launch-page
+        - search-app
+        language: ['javascript', 'typescript']
 
     steps:
     - name: Checkout
