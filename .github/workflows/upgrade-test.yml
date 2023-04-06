@@ -51,15 +51,24 @@ jobs:
         capabilities:
         # - command-bot
         # - notification
-        - workflow-bot
-        - dashboard-tab
-        - tab
-        - tab-spfx
-        - tab-non-sso
-        - bot
-        - message-extension
-        - sso-launch-page
-        - search-app
+        # - workflow-bot
+        # - dashboard-tab
+        # - tab
+        # - tab-spfx
+        # - tab-non-sso
+        # - bot
+        # - message-extension
+        # - sso-launch-page
+        # - search-app
+        # samples
+        - hello-world-tab
+        - hello-world-tab-with-backend
+        - hello-world-bot
+        - bot-sso
+        - hello-world-in-meeting
+        - adaptive-card-notification
+        - incoming-webhook-notification
+        - stocks-update-notification-bot
         language: ['javascript', 'typescript']
 
     steps:
@@ -84,21 +93,23 @@ jobs:
           npm run setup
 
     - run: npm install -g @microsoft/teamsfx-cli@${{ matrix.cli-version }}
-    - run: teamsfx new --app-name migrationtest --capabilities ${{ matrix.capabilities }} --programming-language ${{ matrix.language }} --interactive false
+    # - run: teamsfx new --app-name migrationtest --capabilities ${{ matrix.capabilities }} --programming-language ${{ matrix.language }} --interactive false
+    #   working-directory: ./
+    - run: teamsfx new template ${{ matrix.capabilities }} --interactive false
       working-directory: ./
     - run: npm install -D @microsoft/teamsfx-cli@2.0.0-alpha.9653a3f7c.0
-      working-directory: ./migrationtest
+      working-directory: ./${{ matrix.capabilities }}
     - run: npx teamsfx upgrade --force
-      working-directory: ./migrationtest
+      working-directory: ./${{ matrix.capabilities }}
     - run: npx teamsfx provision --env dev --debug
-      working-directory: ./migrationtest 
+      working-directory: ./${{ matrix.capabilities }} 
       env: 
         CI_ENABLED: "true"
     - run: npx teamsfx deploy --env dev --debug
-      working-directory: ./migrationtest
+      working-directory: ./${{ matrix.capabilities }}
       env: 
         CI_ENABLED: "true"
-    - run: npx ts-node ./packages/cli/tests/utils/cleaner.ts migrationtest
+    - run: npx ts-node ./packages/cli/tests/utils/cleaner.ts ${{ matrix.capabilities }}
       working-directory: ./
       if: ${{ always() }}
 
