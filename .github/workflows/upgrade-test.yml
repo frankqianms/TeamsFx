@@ -9,7 +9,7 @@ jobs:
     steps: 
     - run: curl -Lo bicep https://github.com/Azure/bicep/releases/v0.4.613/download/bicep-linux-x64
     - run: chmod +x ./bicep
-    - run: sudo mkdir $HOME/.fx/bin/
+    - run: sudo mkdir $HOME/.fx/ && sudo mkdir $HOME/.fx/bin/
     - run: sudo mv ./bicep $HOME/.fx/bin/bicep
     - run: bicep --help
 
