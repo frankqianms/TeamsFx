@@ -4,8 +4,18 @@ on:
   workflow_dispatch
 
 jobs:
+  download-bicep:
+    runs-on: ubuntu-latest
+    steps: 
+    - run: curl -Lo bicep https://github.com/Azure/bicep/releases/v0.4.613/download/bicep-linux-x64
+    - run: chmod +x ./bicep
+    - run: sudo mv ./bicep $HOME/.fx/bin/bicep
+    - run: bicep --help
+
   test:
     runs-on: ubuntu-latest
+
+    needs: download-bicep
 
     env:
       AZURE_ACCOUNT_NAME: ${{ secrets.TEST_USER_NAME }}
@@ -61,11 +71,6 @@ jobs:
         max_attempts: 5
         command: |
           npm run setup
-
-    # - name: Download bicep
-    #   with:
-    #     command: |
-    #       curl -Lo bicep https://github.com/Azure/bicep/releases/v0.4.613/download/bicep-linux-x64
 
     - run: npm install -g @microsoft/teamsfx-cli@${{ matrix.cli-version }}
     - run: teamsfx new --app-name migrationtest --capabilities ${{ matrix.capabilities }} --programming-language ${{ matrix.language }} --interactive false
