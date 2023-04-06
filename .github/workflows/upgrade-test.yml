@@ -23,23 +23,23 @@ jobs:
       matrix:
         cli-version:
         - 1.2.4
-        # - 1.2.3
-        # - 1.2.2
-        # - 1.2.1
-        # - 1.2.0
+        - 1.2.3
+        - 1.2.2
+        - 1.2.1
+        - 1.2.0
         capabilities:
         - command-bot
-        # - notification
-        # - workflow-bot
-        # - dashboard-tab
-        # - tab
-        # - tab-spfx
-        # - tab-non-sso
-        # - bot
-        # - message-extension
-        # - sso-launch-page
-        # - search-app
-        language: ['javascript']
+        - notification
+        - workflow-bot
+        - dashboard-tab
+        - tab
+        - tab-spfx
+        - tab-non-sso
+        - bot
+        - message-extension
+        - sso-launch-page
+        - search-app
+        language: ['javascript', 'typescript']
 
     steps:
     - name: Checkout
@@ -69,14 +69,14 @@ jobs:
       working-directory: ./migrationtest
     - run: npx teamsfx upgrade --force
       working-directory: ./migrationtest
-    # - run: npx teamsfx provision --env dev --debug
-    #   working-directory: ./migrationtest 
-    #   env: 
-    #     CI_ENABLED: "true"
-    # - run: npx teamsfx deploy --env dev --debug
-    #   working-directory: ./migrationtest
-    #   env: 
-    #     CI_ENABLED: "true"
+    - run: npx teamsfx provision --env dev --debug
+      working-directory: ./migrationtest 
+      env: 
+        CI_ENABLED: "true"
+    - run: npx teamsfx deploy --env dev --debug
+      working-directory: ./migrationtest
+      env: 
+        CI_ENABLED: "true"
     - run: npx ts-node ./packages/cli/tests/utils/cleaner.ts migrationtest
       working-directory: ./
       if: ${{ always() }}
