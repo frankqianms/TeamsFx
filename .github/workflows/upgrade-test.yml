@@ -32,6 +32,10 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 16
+
+    - name: Setup legacy-peer-deps
+        run: |
+          npm config set legacy-peer-deps true
     
     - name: Setup project
       uses: nick-fields/retry@v2
