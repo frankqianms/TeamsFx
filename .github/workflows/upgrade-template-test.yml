@@ -51,7 +51,7 @@ jobs:
         - 1.0.0
         capabilities:
         # templates
-        # - command-bot
+        - command-bot
         - notification
         - workflow-bot
         - dashboard-tab
@@ -61,7 +61,7 @@ jobs:
         - bot
         - message-extension
         - sso-launch-page
-        - search-app
+        # - search-app
         # samples
         # - hello-world-tab
         # - hello-world-tab-with-backend
