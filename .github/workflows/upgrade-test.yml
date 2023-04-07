@@ -30,11 +30,12 @@ jobs:
       SIDELOADING_SERVICE_SCOPE: "https://titles.prod.mos.microsoft.com/.default"
 
     strategy:
+      fail-fast: false
       max-parallel: 50
       matrix:
         cli-version:
-        # - 1.2.4
-        # - 1.2.3
+        - 1.2.4
+        - 1.2.3
         - 1.2.2
         - 1.2.1
         - 1.2.0
