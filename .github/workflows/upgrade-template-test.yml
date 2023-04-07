@@ -1,4 +1,4 @@
-name: Test upgrade
+name: Test template upgrade
 
 on:
   workflow_dispatch
@@ -51,7 +51,7 @@ jobs:
         - 1.0.0
         capabilities:
         # templates
-        - command-bot
+        # - command-bot
         - notification
         - workflow-bot
         - dashboard-tab

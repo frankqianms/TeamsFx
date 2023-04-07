@@ -1,4 +1,4 @@
-name: Test upgrade
+name: Test sample upgrade
 
 on:
   workflow_dispatch
