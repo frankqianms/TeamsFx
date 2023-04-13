@@ -98,11 +98,11 @@ jobs:
     #   working-directory: ./
     - run: teamsfx new template ${{ matrix.capabilities }} --interactive false
       working-directory: ./
-    - run: npm install -D @microsoft/teamsfx-cli@2.0.0-beta.2023041108.0
-      working-directory: ./${{ matrix.capabilities }}
-    - run: npx teamsfx upgrade --force
-      working-directory: ./${{ matrix.capabilities }}
-    - run: ls -al 
+    # - run: npm install -D @microsoft/teamsfx-cli@2.0.0-beta.2023041108.0
+    #   working-directory: ./${{ matrix.capabilities }}
+    # - run: npx teamsfx upgrade --force
+    #   working-directory: ./${{ matrix.capabilities }}
+    - run: ls -al && node -v
       working-directory: ./${{ matrix.capabilities }}
     - run: cat teamsapp.yml
       working-directory: ./${{ matrix.capabilities }}
