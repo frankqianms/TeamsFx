@@ -104,8 +104,8 @@ jobs:
     #   working-directory: ./${{ matrix.capabilities }}
     - run: ls -al && node -v
       working-directory: ./${{ matrix.capabilities }}
-    - run: cat teamsapp.yml
-      working-directory: ./${{ matrix.capabilities }}
+    # - run: cat teamsapp.yml
+    #   working-directory: ./${{ matrix.capabilities }}
     - run: npx teamsfx provision --env dev --debug
       working-directory: ./${{ matrix.capabilities }} 
       env: 
