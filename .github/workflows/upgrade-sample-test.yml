@@ -93,15 +93,17 @@ jobs:
         command: |
           npm run setup
 
-    - run: npm install -g @microsoft/teamsfx-cli@${{ matrix.cli-version }}
+    # - run: npm install -g @microsoft/teamsfx-cli@${{ matrix.cli-version }}
+    - run: npm install -D @microsoft/teamsfx-cli@2.0.0-beta.2023041408.0
+      working-directory: ./${{ matrix.capabilities }}
     # - run: teamsfx new --app-name migrationtest --capabilities ${{ matrix.capabilities }} --programming-language ${{ matrix.language }} --interactive false
     #   working-directory: ./
     - run: teamsfx new template ${{ matrix.capabilities }} --interactive false
       working-directory: ./
-    - run: npm install -D @microsoft/teamsfx-cli@2.0.0-beta.2023041408.0
-      working-directory: ./${{ matrix.capabilities }}
-    - run: npx teamsfx upgrade --force
-      working-directory: ./${{ matrix.capabilities }}
+    # - run: npm install -D @microsoft/teamsfx-cli@2.0.0-beta.2023041408.0
+    #   working-directory: ./${{ matrix.capabilities }}
+    # - run: npx teamsfx upgrade --force
+    #   working-directory: ./${{ matrix.capabilities }}
     # - run: ls -al && node -v
     #   working-directory: ./${{ matrix.capabilities }}
     # - run: cat teamsapp.yml
