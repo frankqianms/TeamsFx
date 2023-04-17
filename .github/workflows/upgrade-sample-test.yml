@@ -95,7 +95,7 @@ jobs:
 
     # - run: npm install -g @microsoft/teamsfx-cli@${{ matrix.cli-version }}
     - run: npm install -D @microsoft/teamsfx-cli@2.0.0-beta.2023041408.0
-      working-directory: ./${{ matrix.capabilities }}
+      working-directory: ./
     # - run: teamsfx new --app-name migrationtest --capabilities ${{ matrix.capabilities }} --programming-language ${{ matrix.language }} --interactive false
     #   working-directory: ./
     - run: teamsfx new template ${{ matrix.capabilities }} --interactive false
