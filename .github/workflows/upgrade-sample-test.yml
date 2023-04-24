@@ -49,8 +49,19 @@ jobs:
         # - 1.0.2
         # - 1.0.1
         # - 1.0.0
-        capabilities:
-        # - command-bot
+        sample-capabilities:
+        # samples
+        - hello-world-tab
+        # - hello-world-tab-with-backend
+        # - hello-world-bot
+        # - bot-sso
+        # - hello-world-in-meeting
+        # - adaptive-card-notification
+        # - incoming-webhook-notification
+        # - stocks-update-notification-bot
+        template-capabilities:
+        # templates
+        - command-bot
         # - notification
         # - workflow-bot
         # - dashboard-tab
@@ -61,16 +72,7 @@ jobs:
         # - message-extension
         # - sso-launch-page
         # - search-app
-        # samples
-        # - hello-world-tab
-        - hello-world-tab-with-backend
-        # - hello-world-bot
-        # - bot-sso
-        # - hello-world-in-meeting
-        # - adaptive-card-notification
-        # - incoming-webhook-notification
-        # - stocks-update-notification-bot
-        language: ['javascript', 'typescript']
+        language: ['javascript']
 
     steps:
     - name: Checkout
@@ -93,44 +95,57 @@ jobs:
         command: |
           npm run setup
 
-    # - run: npm install -g @microsoft/teamsfx-cli@${{ matrix.cli-version }}
-    - run: npm install -D @microsoft/teamsfx-cli@2.0.0-beta.2023041408.0
+    # Test samples
+    - run: npm install -g @microsoft/teamsfx-cli@${{ matrix.cli-version }}
+    - run: teamsfx new template ${{ matrix.sample-capabilities }} --interactive false
       working-directory: ./
-    # - run: teamsfx new --app-name migrationtest --capabilities ${{ matrix.capabilities }} --programming-language ${{ matrix.language }} --interactive false
-    #   working-directory: ./
-    - run: teamsfx new template ${{ matrix.capabilities }} --interactive false
-      working-directory: ./
-    # - run: npm install -D @microsoft/teamsfx-cli@2.0.0-beta.2023041408.0
-    #   working-directory: ./${{ matrix.capabilities }}
-    # - run: npx teamsfx upgrade --force
-    #   working-directory: ./${{ matrix.capabilities }}
-    # - run: ls -al && node -v
-    #   working-directory: ./${{ matrix.capabilities }}
-    # - run: cat teamsapp.yml
-    #   working-directory: ./${{ matrix.capabilities }}
+    - run: npm install -D @microsoft/teamsfx-cli@alpha
+      working-directory: ./${{ matrix.sample-capabilities }}
+    - run: npx teamsfx upgrade --force
+      working-directory: ./${{ matrix.sample-capabilities }}
     - run: npx teamsfx provision --env dev --debug
-      working-directory: ./${{ matrix.capabilities }} 
+      working-directory: ./${{ matrix.sample-capabilities }} 
       env: 
         CI_ENABLED: "true"
     - run: npx teamsfx deploy --env dev --debug
-      working-directory: ./${{ matrix.capabilities }}
+      working-directory: ./${{ matrix.sample-capabilities }}
       env: 
         CI_ENABLED: "true"
-    - run: npx ts-node ./packages/cli/tests/utils/cleaner.ts ${{ matrix.capabilities }}
+    - run: npx ts-node ./packages/cli/tests/utils/cleaner.ts ${{ matrix.sample-capabilities }}
       working-directory: ./
       if: ${{ always() }}
 
-  # rerun:
-  #   needs: test
-  #   if: ${{ failure() && github.run_attempt < 5 }}
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: rerun
-  #       run: |
-  #         curl \
-  #          -X POST \
-  #          -H "Accept: application/vnd.github+json" \
-  #          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"\
-  #          -H "X-GitHub-Api-Version: 2022-11-28" \
-  #          https://api.github.com/repos/${{ github.repository }}/actions/workflows/rerun.yml/dispatches \
-  #          -d '{"ref":"${{ github.ref_name }}","inputs":{"run_id":"${{ github.run_id }}", "max_attempts":"5"}}'
+    # Test templates
+    - run: npm install -g @microsoft/teamsfx-cli@${{ matrix.cli-version }}
+    - run: teamsfx new --app-name migrationtest --capabilities ${{ matrix.template-capabilities }} --programming-language ${{ matrix.language }} --interactive false
+      working-directory: ./
+    - run: npm install -D @microsoft/teamsfx-cli@alpha
+      working-directory: ./migrationtest
+    - run: npx teamsfx upgrade --force
+      working-directory: ./migrationtest
+    - run: npx teamsfx provision --env dev --debug
+      working-directory: ./migrationtest
+      env: 
+        CI_ENABLED: "true"
+    - run: npx teamsfx deploy --env dev --debug
+      working-directory: ./migrationtest
+      env: 
+        CI_ENABLED: "true"
+    - run: npx ts-node ./packages/cli/tests/utils/cleaner.ts migrationtest
+      working-directory: ./
+      if: ${{ always() }}
+
+  rerun:
+    needs: test
+    if: ${{ failure() && github.run_attempt < 3 }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: rerun
+        run: |
+          curl \
+           -X POST \
+           -H "Accept: application/vnd.github+json" \
+           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"\
+           -H "X-GitHub-Api-Version: 2022-11-28" \
+           https://api.github.com/repos/${{ github.repository }}/actions/workflows/rerun.yml/dispatches \
+           -d '{"ref":"${{ github.ref_name }}","inputs":{"run_id":"${{ github.run_id }}", "max_attempts":"3"}}'
